@@ -5,15 +5,15 @@ import tester.IsLinearSystemSolutionTester
 import tester.NonDegeneracyTester
 
 class CanonicalConverter {
-    fun toGenerative(matrix: String): Matrix {
+    fun toGenerative(matrix: String): String {
         return convert(matrix, false)
     }
 
-    fun toParityCheck(matrix: String): Matrix {
+    fun toParityCheck(matrix: String): String {
         return convert(matrix, true)
     }
 
-    private fun convert(matrix: String, toParityCheck: Boolean): Matrix {
+    private fun convert(matrix: String, toParityCheck: Boolean): String {
         val parser = MatrixParser()
         val nonDegeneracyTester = NonDegeneracyTester()
         val isLinearSystemSolutionTester = IsLinearSystemSolutionTester()
@@ -28,6 +28,6 @@ class CanonicalConverter {
             require(isLinearSystemSolutionTester.test(from, to)) { "полученная матрица не является порождающей" }
         }
 
-        return to
+        return parser.createStringFromMatrix(to)
     }
 }

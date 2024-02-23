@@ -12,7 +12,9 @@ class ConverterTest {
         val converter = CanonicalConverter()
         val parser = MatrixParser()
 
-        val generativeActual = converter.toGenerative(parityCheck)
+        val generativeActualString = converter.toGenerative(parityCheck)
+
+        val generativeActual = parser.createMatrixFromString(generativeActualString)
         val generativeExpectedMatrix = parser.createMatrixFromString(generative)
         assert(generativeActual.isTransformableTo(generativeExpectedMatrix))
     }
@@ -23,8 +25,11 @@ class ConverterTest {
         val converter = CanonicalConverter()
         val parser = MatrixParser()
 
-        val parityCheckActual = converter.toParityCheck(generative)
+        val parityCheckActualString = converter.toParityCheck(generative)
+
+        val parityCheckActual = parser.createMatrixFromString(parityCheckActualString)
         val parityCheckExpected = parser.createMatrixFromString(parityCheck)
+
         assert(parityCheckActual.isTransformableTo(parityCheckExpected))
     }
 
