@@ -1,5 +1,7 @@
 plugins {
+    application
     kotlin("jvm") version "1.9.22"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "ru.nsu.e.shelbogashev"
@@ -34,4 +36,8 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+application {
+    mainClass.set("MainKt")
 }

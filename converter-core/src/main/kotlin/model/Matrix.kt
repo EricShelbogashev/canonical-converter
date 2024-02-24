@@ -1,15 +1,19 @@
 package model
 
-class Matrix(val rows: Int, val cols: Int) {
-    private var data: Array<Array<Int>> = Array(rows) { Array(cols) { 0 } }
+class Matrix {
+    var cols: Int
+    val rows: Int
+    private var data: Array<Array<Int>>
 
-    constructor(data: Array<Array<Double>>) : this(
-        data.size,
-        if (data.isNotEmpty()) data[0].size else 0
+    constructor(rows: Int, cols: Int) : this(
+        Array(rows) { Array(cols) { 0 } }
     )
 
-    init {
+    constructor(data: Array<Array<Int>>) {
+        this.rows = data.size
+        this.cols = data[0].size
         require(rows > 0 && cols > 0) { "количество строк и столбцов должно быть положительным целым числом" }
+        this.data = data
     }
 
     companion object {
@@ -188,10 +192,6 @@ class Matrix(val rows: Int, val cols: Int) {
         return newMatrix
     }
 
-    init {
-        require(rows > 0 && cols > 0) { "количество строк и столбцов должно быть положительным целым числом" }
-    }
-
     operator fun get(row: Int, col: Int): Int {
         if (row !in 0 until rows || col !in 0 until cols) {
             throw IndexOutOfBoundsException("обращение за пределы матрицы")
@@ -322,5 +322,24 @@ class Matrix(val rows: Int, val cols: Int) {
 
     fun isZero(): Boolean {
         return data.flatten().all { it == 0 }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Matrix
+
+        if (rows != other.rows || cols != other.cols) return false
+        if (!data.contentDeepEquals(other.data)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = rows
+        result = 31 * result + cols
+        result = 31 * result + data.contentDeepHashCode()
+        return result
     }
 }
