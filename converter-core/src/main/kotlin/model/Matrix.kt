@@ -80,7 +80,7 @@ class Matrix {
     }
 
     fun rank(): Int {
-        val ref = this.gaussianElimination()
+        val ref = this.toRowEchelonFormMod2().first
         var rank = 0
         for (i in 0 until ref.rows) {
             for (j in 0 until ref.cols) {

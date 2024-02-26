@@ -5,7 +5,6 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import parser.MatrixParser
-import service.MatrixConverter
 import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -109,7 +108,6 @@ class ConverterTest {
         println(actual)
         assertEquals(expected, actual)
     }
-
 
     private fun singularMatrices(): Array<Array<Any>> = arrayOf(
         arrayOf("[[0,1,1,1,0,0],[0,1,1,1,0,0],[1,1,0,0,0,1]]"),
