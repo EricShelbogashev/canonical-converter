@@ -80,7 +80,7 @@ class Matrix {
     }
 
     fun rank(): Int {
-        val ref = this.toRowEchelonFormMod2().first
+        val ref = this.toRowEchelonForm(2).first
         var rank = 0
         for (i in 0 until ref.rows) {
             for (j in 0 until ref.cols) {
@@ -134,19 +134,17 @@ class Matrix {
         return result
     }
 
-
     /**
-     * Приведение матрицы к ступенчатому виду в кольце по модулю 2.
+     * Приведение матрицы к ступенчатому виду в кольце по модулю mod.
      */
-    fun toRowEchelonFormMod2(): Pair<Matrix, List<Int>> {
+    fun toRowEchelonForm(mod: Int): Pair<Matrix, List<Int>> {
         val matrix = copy()
         val pivotColumns = mutableListOf<Int>()
         var lead = 0
-
         for (r in 0 until rows) {
             if (lead >= cols) break
             var i = r
-            while (matrix[i, lead] == 0) {
+            while (matrix[i, lead] % mod == 0) {
                 i++
                 if (i == rows) {
                     i = r
@@ -165,19 +163,50 @@ class Matrix {
             }
             pivotColumns.add(lead)
 
-            // Приведение всех элементов в столбце к 0, кроме ведущего элемента
+            // Приведение элементов столбца к нулю с использованием аддитивной инверсии
             for (j in 0 until rows) {
-                if (j != r && matrix[j, lead] != 0) {
-                    for (k in 0 until cols) {
-                        matrix[j, k] = (matrix[j, k] + matrix[r, k]) % 2
+                if (j != r) {
+                    val mult = matrix[j, lead]
+                    for (k in lead until cols) {
+                        val factor = (mult * modInverse(matrix[r, lead], mod)) % mod
+                        matrix[j, k] = (matrix[j, k] - factor * matrix[r, k] + mod * mod) % mod
                     }
                 }
             }
+
             lead++
         }
 
         return Pair(matrix, pivotColumns)
     }
+
+    private fun gcdExtended(a: Int, b: Int, x: IntArray, y: IntArray): Int {
+        if (a == 0) {
+            x[0] = 0
+            y[0] = 1
+            return b
+        }
+        val x1 = IntArray(1)
+        val y1 = IntArray(1)
+        val gcd = gcdExtended(b % a, a, x1, y1)
+
+        x[0] = y1[0] - (b / a) * x1[0]
+        y[0] = x1[0]
+
+        return gcd
+    }
+
+    private fun modInverse(a: Int, mod: Int): Int {
+        val x = IntArray(1)
+        val y = IntArray(1)
+        val g = gcdExtended(a, mod, x, y)
+        if (g != 1) {
+            throw IllegalArgumentException("Inverse does not exist.")
+        } else {
+            return (x[0] % mod + mod) % mod
+        }
+    }
+
 
     /**
      * Создает и возвращает глубокую копию этой матрицы.
@@ -297,8 +326,8 @@ class Matrix {
             throw IllegalArgumentException("матрицы должны иметь одинаковую размерность")
         }
 
-        val refThis = this.toRowEchelonFormMod2()
-        val refOther = other.toRowEchelonFormMod2()
+        val refThis = this.toRowEchelonForm(2)
+        val refOther = other.toRowEchelonForm(2)
 
         // Compare the REF forms of both matrices
         for (i in 0 until refThis.first.rows) {

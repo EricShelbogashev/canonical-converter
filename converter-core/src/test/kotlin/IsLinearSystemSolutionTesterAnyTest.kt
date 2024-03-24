@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import tester.IsLinearSystemSolutionTester
 
-internal class IsLinearSystemSolutionTesterTest {
+internal class IsLinearSystemSolutionTesterAnyTest {
 
     private val tester = IsLinearSystemSolutionTester()
 

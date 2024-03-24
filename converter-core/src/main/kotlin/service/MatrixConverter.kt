@@ -9,7 +9,7 @@ object MatrixConverter {
     fun canonical(matrix: Matrix): Matrix {
         logger.trace { "исходная матрица\n$matrix" }
         
-        val (rrefMatrix, pivotColumns) = matrix.toRowEchelonFormMod2()
+        val (rrefMatrix, pivotColumns) = matrix.toRowEchelonForm(2)
         logger.trace { "ступенчатый вид\n$rrefMatrix" }
         logger.trace { "индексы ведущих столбцов\n$pivotColumns" }
 

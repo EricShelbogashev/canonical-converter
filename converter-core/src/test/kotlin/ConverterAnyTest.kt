@@ -5,10 +5,14 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import parser.MatrixParser
+import service.MatrixConverter
+import kotlin.math.absoluteValue
+import kotlin.math.min
+import kotlin.random.Random
 import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ConverterTest {
+class ConverterAnyTest {
     @ParameterizedTest
     @MethodSource("matrices")
     fun toGenerative(parityCheck: String, generative: String) {
@@ -53,7 +57,7 @@ class ConverterTest {
     fun testToRowEchelonFormMod2() {
         val matrix = Matrix(arrayOf(arrayOf(1, 0, 1), arrayOf(1, 1, 1)))
         val expected = Matrix(arrayOf(arrayOf(1, 0, 1), arrayOf(0, 1, 0)))
-        val actual = matrix.toRowEchelonFormMod2()
+        val actual = matrix.toRowEchelonForm(2)
         assertEquals(expected, actual.first)
     }
 
@@ -107,6 +111,21 @@ class ConverterTest {
 
         println(actual)
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun test() {
+        val generativeMatrix = Matrix(200, 2000) // G = k=200, n=2000 -> H = (2000-200, 2000)
+        for (i in 0..< generativeMatrix.cols) {
+            for (j in 1..3) {
+                val rowIndex = ((Random.nextInt() + j) % generativeMatrix.rows).absoluteValue
+                generativeMatrix[rowIndex, i] = 1
+            }
+        }
+        val n = 2000
+        val k = 200
+        val check = MatrixConverter.canonical(generativeMatrix)
+        assertEquals(min(n-k, n), check.rank())
     }
 
     private fun singularMatrices(): Array<Array<Any>> = arrayOf(

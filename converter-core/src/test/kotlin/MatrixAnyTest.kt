@@ -2,7 +2,7 @@ import model.Matrix
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class MatrixTest {
+class MatrixAnyTest {
     @Test
     fun testConstructor() {
         val matrix = Matrix(2, 3)

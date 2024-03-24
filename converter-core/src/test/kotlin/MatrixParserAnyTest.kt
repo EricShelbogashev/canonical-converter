@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import parser.MatrixParser
 
-internal class MatrixParserTest {
+internal class MatrixParserAnyTest {
     
     private val matrixParser = MatrixParser()
 
